@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Dividend ETF Tracker</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; }
+        .table-responsive { overflow-x: auto; }
+        th { text-align: center; vertical-align: middle; white-space: nowrap; }
+        td { white-space: nowrap; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1 class="mb-4">Monthly Dividend ETF Tracker</h1>
+
+        <div class="table-responsive">
+            <table id="etfTable" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th rowspan="2">종목코드</th>
+                        <th rowspan="2">종목명</th>
+                        <th rowspan="2">시가총액</th>
+                        <th rowspan="2">상장일</th>
+                        <th rowspan="2">기초지수</th>
+                        <th rowspan="2">예상분배금</th>
+                        <th rowspan="2">현재주가</th>
+                        <th rowspan="2">주가수익률</th>
+                        <th rowspan="2">총수익률</th>
+                        <th colspan="6">수익률</th>
+                        <th colspan="2">1월</th>
+                        <th colspan="2">2월</th>
+                        <th colspan="2">3월</th>
+                        <th colspan="2">4월</th>
+                        <th colspan="2">5월</th>
+                        <th colspan="2">6월</th>
+                        <th colspan="2">7월</th>
+                        <th colspan="2">8월</th>
+                        <th colspan="2">9월</th>
+                        <th colspan="2">10월</th>
+                        <th colspan="2">11월</th>
+                        <th colspan="2">12월</th>
+                    </tr>
+                    <tr>
+                        <!-- Returns Sub-headers -->
+                        <th>1일</th>
+                        <th>1주일</th>
+                        <th>1개월</th>
+                        <th>3개월</th>
+                        <th>6개월</th>
+                        <th>1년</th>
+
+                        <!-- Monthly Sub-headers (repeated 12 times) -->
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                        <th>분배금</th> <th>분배율</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#etfTable').DataTable({
+                scrollX: true,
+                pageLength: 25,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ko.json'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
