@@ -1,0 +1,5 @@
+{
+  "status": "error",
+  "message": "로그인이 필요합니다.",
+  "redirect": "https://search-etf.com/bbs/login.php"
+}

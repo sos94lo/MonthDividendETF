@@ -9,10 +9,14 @@
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <style>
-        body { padding: 20px; }
+        body { padding: 20px; font-size: 0.9rem; }
         .table-responsive { overflow-x: auto; }
-        th { text-align: center; vertical-align: middle; white-space: nowrap; }
-        td { white-space: nowrap; }
+        th { text-align: center; vertical-align: middle; white-space: nowrap; background-color: #f8f9fa; }
+        td { white-space: nowrap; text-align: right; vertical-align: middle; }
+        td.text-center { text-align: center; }
+        td.text-left { text-align: left; }
+        .positive { color: red; }
+        .negative { color: blue; }
     </style>
 </head>
 <body>
@@ -20,19 +24,19 @@
         <h1 class="mb-4">Monthly Dividend ETF Tracker</h1>
 
         <div class="table-responsive">
-            <table id="etfTable" class="table table-striped table-bordered" style="width:100%">
-                <thead>
+            <table id="etfTable" class="table table-striped table-bordered table-hover" style="width:100%">
+                <thead class="table-light">
                     <tr>
                         <th rowspan="2">종목코드</th>
                         <th rowspan="2">종목명</th>
-                        <th rowspan="2">시가총액</th>
+                        <th rowspan="2">시가총액(억)</th>
                         <th rowspan="2">상장일</th>
                         <th rowspan="2">기초지수</th>
                         <th rowspan="2">예상분배금</th>
                         <th rowspan="2">현재주가</th>
                         <th rowspan="2">주가수익률</th>
                         <th rowspan="2">총수익률</th>
-                        <th colspan="6">수익률</th>
+                        <th colspan="6">수익률 (%)</th>
                         <th colspan="2">1월</th>
                         <th colspan="2">2월</th>
                         <th colspan="2">3월</th>
@@ -56,22 +60,39 @@
                         <th>1년</th>
 
                         <!-- Monthly Sub-headers (repeated 12 times) -->
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
-                        <th>분배금</th> <th>분배율</th>
+                        {% for i in range(12) %}
+                        <th>분배금</th> <th>율(%)</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Data will be populated here -->
+                    {% for etf in etf_list %}
+                    <tr>
+                        <td class="text-center">{{ etf.code }}</td>
+                        <td class="text-left fw-bold">{{ etf.name }}</td>
+                        <td>{{ "{:,}".format(etf.market_cap) }}</td>
+                        <td class="text-center">{{ etf.listing_date }}</td>
+                        <td class="text-left">{{ etf.index }}</td>
+                        <td>{{ "{:,}".format(etf.expected_dist) }}</td>
+                        <td class="fw-bold">{{ "{:,}".format(etf.price) }}</td>
+                        <td>{{ etf.price_return }}</td>
+                        <td>{{ etf.total_return }}</td>
+
+                        <!-- Returns -->
+                        <td class="{{ 'positive' if etf.returns['1D'] > 0 else 'negative' if etf.returns['1D'] < 0 else '' }}">{{ etf.returns['1D'] }}</td>
+                        <td class="{{ 'positive' if etf.returns['1W'] > 0 else 'negative' if etf.returns['1W'] < 0 else '' }}">{{ etf.returns['1W'] }}</td>
+                        <td class="{{ 'positive' if etf.returns['1M'] > 0 else 'negative' if etf.returns['1M'] < 0 else '' }}">{{ etf.returns['1M'] }}</td>
+                        <td class="{{ 'positive' if etf.returns['3M'] > 0 else 'negative' if etf.returns['3M'] < 0 else '' }}">{{ etf.returns['3M'] }}</td>
+                        <td class="{{ 'positive' if etf.returns['6M'] > 0 else 'negative' if etf.returns['6M'] < 0 else '' }}">{{ etf.returns['6M'] }}</td>
+                        <td class="{{ 'positive' if etf.returns['1Y'] > 0 else 'negative' if etf.returns['1Y'] < 0 else '' }}">{{ etf.returns['1Y'] }}</td>
+
+                        <!-- Monthly -->
+                        {% for month in etf.months %}
+                        <td>{{ "{:,}".format(month.amt) if month.amt > 0 else '-' }}</td>
+                        <td>{{ month.rate if month.rate > 0 else '-' }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -89,10 +110,14 @@
         $(document).ready(function() {
             $('#etfTable').DataTable({
                 scrollX: true,
+                fixedColumns: {
+                    left: 2
+                },
                 pageLength: 25,
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/ko.json'
-                }
+                },
+                order: [[2, 'desc']] // Sort by Market Cap by default
             });
         });
     </script>
